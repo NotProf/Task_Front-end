@@ -1,0 +1,16 @@
+<div class="wrapper fadeInDown">
+
+
+  <div id="formContent">
+    <form #form="ngForm">
+      <div class="forteText">Registration</div>
+      <input type="text" id="login"  ngModel name="username" class="fadeIn second"  placeholder="Username">
+      <input type="password" id="password" ngModel name="password" class="fadeIn third" placeholder="Password">
+      <input type="password" (change)="checkPassword(form)" ngModel name="confirmp" class="fadeIn third"
+             placeholder="Confirm password">
+      <div>{{checkpass}}</div>
+      <input type="submit" class="fadeIn fourth" value="Register" (click)="register(form)">
+    </form>
+
+  </div>
+</div>

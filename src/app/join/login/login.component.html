@@ -1,0 +1,15 @@
+<div class="wrapper fadeInDown">
+
+
+  <div id="formContent">
+    <form #form="ngForm">
+      <div class="forteText">Login</div>
+      <div *ngIf="message" class="alert alert-danger">{{message}}</div>
+      <input type="text" id="login"  ngModel name="username" class="fadeIn second"  placeholder="Username">
+      <input type="password" id="password" ngModel name="password" class="fadeIn third" placeholder="Password">
+      <input type="submit" class="fadeIn fourth btn " value="Log In" (click)="Login(form)">
+
+    </form>
+
+  </div>
+</div>
