@@ -1,16 +1,26 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="large"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
 <div class="wrapper fadeInDown">
 
 
   <div id="formContent">
     <form #form="ngForm">
       <div class="forteText">Registration</div>
+      <div *ngIf="message" class="alert alert-secondary">
+        {{message}}
+      </div>
       <input type="text" id="login"  ngModel name="username" class="fadeIn second"  placeholder="Username">
       <input type="password" id="password" ngModel name="password" class="fadeIn third" placeholder="Password">
-      <input type="password" (change)="checkPassword(form)" ngModel name="confirmp" class="fadeIn third"
-             placeholder="Confirm password">
-      <div>{{checkpass}}</div>
+      <input type="email"  ngModel name="email" class="fadeIn third"
+             placeholder="Email">
       <input type="submit" class="fadeIn fourth" value="Register" (click)="register(form)">
     </form>
-
   </div>
+
 </div>

@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NgForm} from '@angular/forms';
+import {User} from '../../Models/User';
+import {UserService} from '../../Services/user.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-resistration',
@@ -7,24 +10,39 @@ import {NgForm} from '@angular/forms';
   styleUrls: ['./resistration.component.css']
 })
 export class ResistrationComponent implements OnInit {
-  checkpass = '';
-  constructor(private userService: UserService) { }
+  message = '';
+
+  constructor(private userService: UserService,
+              private spinner: NgxSpinnerService) {
+  }
 
   ngOnInit() {
   }
 
   register(form: NgForm) {
+    this.spinner.show();
     const user: User = form.value;
-    console.log(user);
-    this.userService.registration(user).subscribe((res) => {
-      console.log(res);
+    this.userService.checkUsername(user.username).subscribe((check) => {
+       if (check) {
+         this.userService.registration(user).subscribe((res) => {
+           console.log(res);
+           if (res) {
+             this.message = 'Your account has been created. Check your email';
+           }
+           this.spinner.hide();
+         }, error => {
+           this.message = 'Error, Try again';
+           this.spinner.hide();
+           console.error(error);
+         });
+       } else {
+         this.message = 'Username already exist';
+         this.spinner.hide();
+       }
+    }, error => {
+      this.message = 'Error!';
+      this.spinner.hide();
+      console.error(error);
     });
   }
-
-  checkPassword(form: NgForm) {
-    if(form.value.password === form.value.confirmp)
-      this.checkpass = '';
-    else this.checkpass = 'Паролі не співпадають';
-  }
-}
 }

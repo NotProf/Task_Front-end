@@ -1,1 +1,113 @@
-<p>list works!</p>
+<div class="container-fluid">
+  <button class="btn btn-success add-btn" (click)="open(content)"><b>+</b>New Task</button>
+
+  <div *ngIf="tasks.length === 0" class="alert alert-secondary">You have not tasks yet</div>
+<ul class="list-group">
+  <li *ngFor="let task of tasks" class="list-group-item item-hover">
+   <div  (click)="details(task,detail)" id="textBlock" >
+      <div>{{task.text}}</div>
+    <small>{{task.date | date: 'dd-MM-yyyy'}}</small>
+   </div>
+    <span style="float: right; position: relative; z-index: 100">
+      <button (click)="details(task, share)" class="btn btn-outline-success btn-sm">Share</button>
+      <button (click)="details(task, edit)" class="btn btn-outline-primary btn-sm">Edit</button>
+      <button (click)="remove(task.id)" class="btn btn-outline-danger btn-sm">Remove</button>
+    </span>
+  </li>
+
+</ul>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Task</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #form='ngForm'>
+      <div class="form-group">
+        <label for="tasktext">What do you want to get done?</label>
+        <input type="text" class="form-control " ngModel name="text" id="tasktext"  placeholder="Enter Task Text">
+      </div>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" ngModel name="date"  class="form-control" placeholder="yyyy-mm-dd" >
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="save(form)">Save</button>
+  </div>
+</ng-template>
+
+<ng-template #detail let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" >Task №{{selectedTask.id}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h3>{{selectedTask.text}}</h3>
+    <div>{{selectedTask.date | date: 'dd-MM-yyyy'}}</div>
+    <div>Users: <span *ngFor="let user of selectedTask.users">{{user}}  </span></div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-outline-warning" (click)="modal.dismiss('Cross click')">OK</button>
+  </div>
+</ng-template>
+
+
+<ng-template #edit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" >Edit Task</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form >
+      <div class="form-group">
+        <label for="tasktext">What do you want to get done?</label>
+        <input   [(ngModel)]="selectedTask.text" name="text" type="text" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input [ngModel]="selectedTask.date | date:'yyyy-MM-dd'" (ngModelChange)="selectedTask.date = $event" name="date"  class="form-control" placeholder="yyyy-mm-dd" name="dp" type="date" >
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="update()">Save</button>
+  </div>
+</ng-template>
+<ng-template #share let-modal>
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Sending...</p>
+  </ngx-spinner>
+  <div class="modal-header">
+    <h4 class="modal-title" >Share Task</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h5>Share with:</h5>
+    <ul class="list-group">
+        <li *ngFor="let user of listUsers" (click)="shareTask(user)"
+            class="list-group-item item-hover">{{user.username}}</li>
+      </ul>
+    </div>
+  <br>
+  <div class="align-content-center text-center">
+    <button class="btn btn-outline-success" (click)="modal.dismiss('Cross click')">
+      <span>Done</span></button>
+  </div>
+  <hr>
+</ng-template>
